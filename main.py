@@ -60,7 +60,57 @@ class Delivery(Base):
 
 Base.metadata.create_all(bind=engine)
 
+class EmployeeCreate(BaseModel):
+    department_id: int
+    full_name: str
+    position: str
+    salary: int
+    bonus: int
+    month: str
 
+class Employee(EmployeeCreate):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class ContractCreate(BaseModel):
+    number: str
+    equipment_type: str
+    comment: str
+    employee_id: int
+    organization_id: int
+
+class Contract(ContractCreate):
+    id: int
+    employee: Employee
+    organization: Organization
+
+    class Config:
+        orm_mode = True
+
+class OrganizationCreate(BaseModel):
+    contract_id: int
+    country_code: str
+    city: str
+    address: str
+    phone: str
+    email: str
+    web_address: str
+
+class Organization(OrganizationCreate):
+    id: int
+    contract: Contract
+
+    class Config:
+        orm_mode = True
+
+class Delivery(BaseModel):
+    id: int
+    contract_id: int
+    equipment_type: str
+    user_comment: str
+    employee_id: int
 def get_db():
     db = SessionLocal()
     try:
